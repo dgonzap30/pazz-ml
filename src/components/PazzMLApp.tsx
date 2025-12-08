@@ -280,7 +280,7 @@ const DetailModal: React.FC<DetailModalProps> = ({ node, onClose, showCompliance
         <div className="bg-black/50 p-6 sm:p-8 border-b border-neutral-800 flex items-start justify-between shrink-0">
           <div className="flex gap-5 sm:gap-6">
             <div className="w-12 h-12 sm:w-16 sm:h-16 bg-neutral-900 text-orange-500 border border-neutral-800 rounded-2xl flex items-center justify-center shadow-inner shrink-0">
-              {React.cloneElement(node.icon, { className: "w-6 h-6 sm:w-8 sm:h-8" })}
+              {React.cloneElement(node.icon, { className: "w-6 h-6 sm:w-8 sm:h-8" } as any)}
             </div>
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">{node.title}</h2>
