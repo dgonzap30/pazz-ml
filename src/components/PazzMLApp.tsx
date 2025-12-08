@@ -268,6 +268,16 @@ const DetailModal: React.FC<DetailModalProps> = ({ node, onClose, showCompliance
     return () => window.removeEventListener('keydown', handleEsc);
   }, [onClose]);
 
+  // Lock body scroll when modal is open (modal content can still scroll)
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
   if (!node) return null;
 
   return (
@@ -679,11 +689,13 @@ export default function PazzMLAppV5() {
       </a>
 
       {/* Modals */}
-      <DetailModal
-        node={selectedNode}
-        onClose={() => setSelectedNode(null)}
-        showCompliance={showCompliance}
-      />
+      {selectedNode && (
+        <DetailModal
+          node={selectedNode}
+          onClose={() => setSelectedNode(null)}
+          showCompliance={showCompliance}
+        />
+      )}
 
       {showSovInfo && (
         <DataSovereigntyInfo onClose={() => setShowSovInfo(false)} />
@@ -703,7 +715,10 @@ export default function PazzMLAppV5() {
 
           <nav className="flex gap-1 bg-neutral-900/50 p-1 sm:p-1.5 rounded-xl border border-neutral-800/50" aria-label="Main navigation">
             <button
-              onClick={() => setActiveTab('architecture')}
+              onClick={() => {
+                setActiveTab('architecture');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
               aria-label="View architecture diagram"
               aria-current={activeTab === 'architecture' ? 'page' : undefined}
               className={`px-3 sm:px-6 py-2 sm:py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:outline-none ${activeTab === 'architecture' ? 'bg-orange-600 text-black shadow-lg shadow-orange-600/20' : 'text-neutral-500 hover:text-white hover:bg-neutral-800'}`}
@@ -711,7 +726,10 @@ export default function PazzMLAppV5() {
               Architecture
             </button>
             <button
-              onClick={() => setActiveTab('roi')}
+              onClick={() => {
+                setActiveTab('roi');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
               aria-label="View return on investment analysis"
               aria-current={activeTab === 'roi' ? 'page' : undefined}
               className={`px-3 sm:px-6 py-2 sm:py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:outline-none ${activeTab === 'roi' ? 'bg-orange-600 text-black shadow-lg shadow-orange-600/20' : 'text-neutral-500 hover:text-white hover:bg-neutral-800'}`}

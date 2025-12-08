@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* Prevent white background on overscroll */
+html,
+body {
+  background-color: #000000;
+}
+
 /* Custom animations */
 @keyframes fadeIn {
   from {
