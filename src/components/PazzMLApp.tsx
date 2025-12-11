@@ -22,9 +22,14 @@ import {
   Activity,
   Box,
   ChevronDown,
+  ChevronUp,
   Users,
   AlertTriangle,
-  Scale
+  Scale,
+  Shield,
+  Eye,
+  Rocket,
+  Network
 } from 'lucide-react';
 
 // --- Type Definitions ---
@@ -53,14 +58,32 @@ interface ROIDataItem {
   desc: string;
 }
 
-interface RoadmapDataItem {
+interface RoadmapPhaseItem {
   phase: string;
   subtitle: string;
-  volume: string;
   time: string;
   desc: string;
   color: string;
   icon: React.ReactElement;
+  deliverables: string[];
+  dataRequirement?: string;
+  status?: 'ready' | 'pending' | 'critical';
+}
+
+interface DataGapRow {
+  feature: string;
+  arModel: string;
+  pdModel: string;
+  lmdStatus: string;
+  arReady: boolean;
+  pdReady: boolean;
+}
+
+interface ExecutiveSummaryPoint {
+  title: string;
+  description: string;
+  icon: React.ReactElement;
+  color: 'orange';
 }
 
 // --- Data Models ---
@@ -185,33 +208,140 @@ const roiData: ROIDataItem[] = [
   }
 ];
 
-const roadmapData: RoadmapDataItem[] = [
+const roadmapPhases: RoadmapPhaseItem[] = [
   {
-    phase: 'Phase 1: MVP (A/R)',
+    phase: 'Phase 1: Foundation',
+    subtitle: 'Golden Record',
+    time: 'Months 1-4',
+    desc: 'Establish verified identity and tax data infrastructure. Automate extraction of Constancia de Situación Fiscal via SAT APIs (CRiskCo/Belvo). Implement RENAPO CURP validation and biometric liveness detection.',
+    color: 'bg-orange-400',
+    icon: <Shield size={20} />,
+    deliverables: [
+      'SAT Integration (CRiskCo/Belvo APIs)',
+      'RENAPO CURP + Biometric Liveness (INE match)',
+      'Device Fingerprinting (geolocation, device data)',
+      'LFPDPPP 2025 Compliance (Express Consent, CNBV Addendum)'
+    ],
+    status: 'ready'
+  },
+  {
+    phase: 'Phase 2: A/R Model',
     subtitle: 'Committee Clone',
-    volume: '10k - 15k',
-    time: 'Months 1-18',
-    desc: 'Trains on past analyst decisions. Replicates human consistency but also human bias. Does not require payment history.',
-    color: 'bg-blue-500',
-    icon: <Users size={20} />
-  },
-  {
-    phase: 'Phase 2: Production (PD)',
-    subtitle: 'Risk Prediction',
-    volume: '20k - 25k',
-    time: 'Month 18+',
-    desc: 'Trains on actual payment defaults. Requires ~300+ default events to be statistically significant. Optimizes profitability.',
+    time: 'Months 5-10',
+    desc: 'Train XGBoost model on 10k-15k historical committee decisions. Implement traffic light system: Green Channel (>90%) auto-approve, Red Channel (<20%) auto-reject, Gray Channel for human review.',
     color: 'bg-orange-500',
-    icon: <Scale size={20} />
+    icon: <Users size={20} />,
+    deliverables: [
+      'XGBoost A/R model (Approved vs Rejected)',
+      'Green Channel: Auto-Approve (Score > 90%)',
+      'Red Channel: Auto-Reject (Score < 20%)',
+      'Gray Channel: Human-in-the-Loop',
+      'SHAP explainability for rejection reasons'
+    ],
+    dataRequirement: '10k-15k decisions',
+    status: 'ready'
   },
   {
-    phase: 'Phase 3: Marketplace',
-    subtitle: 'Multi-Partner',
-    volume: '70k - 100k',
-    time: 'Month 36+',
-    desc: 'Federated learning across multiple partners. Solves the "Cold Start" problem for new agencies joining the platform.',
-    color: 'bg-emerald-500',
-    icon: <Globe size={20} />
+    phase: 'Phase 3: Risk Transition',
+    subtitle: 'Shadow Mode',
+    time: 'Months 11-18',
+    desc: 'Deploy PD Model in shadow mode (scores without deciding). Include macro-economic features (interest rates, inflation index) to adjust for economic shifts. Apply Reject Inference via Fuzzy Augmentation to expand model coverage.',
+    color: 'bg-orange-600',
+    icon: <Eye size={20} />,
+    deliverables: [
+      'Shadow Mode PD deployment (parallel scoring)',
+      'Macro-economic feature integration (rates, inflation)',
+      'Early Payment Default calibration',
+      'Reject Inference via Fuzzy Augmentation',
+      'Model performance monitoring dashboard'
+    ],
+    dataRequirement: '~150+ defaults observed',
+    status: 'pending'
+  },
+  {
+    phase: 'Phase 4: Marketplace',
+    subtitle: 'PD Launch & Orchestration',
+    time: 'Month 19+',
+    desc: 'Implement Champion/Challenger framework: 80% traffic to PD model, 20% remains on A/R for real-time benchmarking. Enable dynamic risk-based pricing. Onboard partners via Transfer Learning. Explore Federated Learning or Anonymized Pooled Learning for data sharing.',
+    color: 'bg-orange-700',
+    icon: <Globe size={20} />,
+    deliverables: [
+      'Champion/Challenger Framework (80/20 traffic split)',
+      'PD Model as primary engine (300+ defaults trigger)',
+      'Dynamic/Risk-Based Pricing',
+      'Partner onboarding via Transfer Learning',
+      'Federated Learning (or Anonymized Pooled as fallback)'
+    ],
+    dataRequirement: '300+ defaults required',
+    status: 'critical'
+  }
+];
+
+const dataGapAnalysis: DataGapRow[] = [
+  {
+    feature: 'Objective',
+    arModel: 'Efficiency (replicate committee)',
+    pdModel: 'Profitability (predict defaults)',
+    lmdStatus: 'Needs Efficiency first',
+    arReady: true,
+    pdReady: false
+  },
+  {
+    feature: 'Training Decisions',
+    arModel: '10k-15k',
+    pdModel: '20k-25k',
+    lmdStatus: 'Feasible',
+    arReady: true,
+    pdReady: true
+  },
+  {
+    feature: 'Bad Labels (Defaults)',
+    arModel: '0 Required',
+    pdModel: '240-300 Defaults',
+    lmdStatus: 'CRITICAL GAP',
+    arReady: true,
+    pdReady: false
+  },
+  {
+    feature: 'Current Verdict',
+    arModel: 'Ready to Deploy',
+    pdModel: 'Do Not Deploy Yet',
+    lmdStatus: 'Phased Approach',
+    arReady: true,
+    pdReady: false
+  }
+];
+
+const executiveSummary: ExecutiveSummaryPoint[] = [
+  {
+    title: 'Data Reality Check',
+    description: 'With ~2% default rate, accumulating 300+ defaults requires processing 15,000+ applications. Rushing PD deployment without sufficient bad labels produces a model that cannot distinguish risk.',
+    icon: <Database size={24} />,
+    color: 'orange'
+  },
+  {
+    title: 'Efficiency Before Profitability',
+    description: 'The A/R model delivers immediate ROI by automating 60-70% of decisions while the portfolio matures. This funds the data collection needed for true risk prediction.',
+    icon: <Rocket size={24} />,
+    color: 'orange'
+  },
+  {
+    title: 'Shadow Mode De-Risks Launch',
+    description: 'Running PD in shadow mode allows calibration against real defaults without business risk. When the trigger threshold (300 defaults) is reached, the model is already battle-tested.',
+    icon: <ShieldCheck size={24} />,
+    color: 'orange'
+  },
+  {
+    title: 'Economic Resilience',
+    description: 'Models include macro-economic features (interest rates, inflation index) ensuring predictions adapt to changing economic conditions over the 18-month maturation period.',
+    icon: <TrendingUp size={24} />,
+    color: 'orange'
+  },
+  {
+    title: 'Platform for Scale',
+    description: 'Transfer Learning enables rapid partner onboarding. Federated Learning (partners run local training nodes) is ambitious but complex. If infrastructure proves too heavy, Anonymized Pooled Learning (hashed data in secure enclaves) serves as an intermediate step.',
+    icon: <Network size={24} />,
+    color: 'orange'
   }
 ];
 
@@ -457,98 +587,329 @@ const DataSovereigntyInfo: React.FC<DataSovereigntyInfoProps> = ({ onClose }) =>
 
 // --- Data Strategy View ---
 
-const DataStrategyView: React.FC = () => (
-  <div className="max-w-6xl mx-auto space-y-16 animate-fadeIn py-12">
+const ExecutiveSummarySection: React.FC = () => {
+  return (
+    <div className="mb-6">
+      <div className="mb-4">
+        <h3 className="text-lg font-bold text-white uppercase tracking-wider">
+          Executive Summary: Why This Approach
+        </h3>
+      </div>
 
-    <div className="text-center space-y-6 mb-16">
-      <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight uppercase">
-        Data <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-orange-500">Roadmap</span>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+        {executiveSummary.map((item, idx) => {
+          const isLastItem = idx === executiveSummary.length - 1;
+          return (
+            <div
+              key={idx}
+              className={`bg-neutral-900/40 rounded-xl p-5 md:p-6 border border-neutral-800/50 ${isLastItem ? 'md:col-span-2 md:max-w-2xl md:mx-auto' : ''}`}
+            >
+              <div className="flex gap-4">
+                <div className="text-orange-500 shrink-0">
+                  {item.icon}
+                </div>
+                <div>
+                  <h4 className="text-white font-bold mb-2 text-base">{item.title}</h4>
+                  <p className="text-sm text-neutral-400 leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+const DataGapAnalysisSection: React.FC = () => (
+  <div className="mb-6">
+    <div className="mb-4">
+      <h3 className="text-lg font-bold text-white uppercase tracking-wider">
+        Data Gap Analysis
+      </h3>
+    </div>
+
+    <div className="bg-neutral-900/40 rounded-xl border border-neutral-800/50 overflow-hidden">
+      {/* Table Header */}
+      <div className="grid grid-cols-4 gap-4 p-4 bg-black/20 border-b border-neutral-800/30">
+        <div className="text-xs font-bold text-neutral-400 uppercase tracking-wide">
+          Feature
+        </div>
+        <div className="text-xs font-bold text-neutral-400 uppercase tracking-wide text-center">
+          A/R Model
+        </div>
+        <div className="text-xs font-bold text-neutral-400 uppercase tracking-wide text-center">
+          PD Model
+        </div>
+        <div className="text-xs font-bold text-neutral-400 uppercase tracking-wide text-center">
+          LMD Status
+        </div>
+      </div>
+
+      {/* Table Body */}
+      {dataGapAnalysis.map((row, idx) => (
+        <div
+          key={idx}
+          className={`grid grid-cols-4 gap-4 p-4 items-center
+                     ${idx !== dataGapAnalysis.length - 1 ? 'border-b border-neutral-800/30' : ''}`}
+        >
+          <div className="text-sm text-neutral-300 font-medium">
+            {row.feature}
+          </div>
+          <div className="flex items-center justify-center gap-2">
+            {row.arReady ? (
+              <CheckCircle size={16} className="text-emerald-500 shrink-0" />
+            ) : (
+              <AlertTriangle size={16} className="text-red-500 shrink-0" />
+            )}
+            <span className="text-sm text-neutral-400">{row.arModel}</span>
+          </div>
+          <div className="flex items-center justify-center gap-2">
+            {row.pdReady ? (
+              <CheckCircle size={16} className="text-emerald-500 shrink-0" />
+            ) : (
+              <AlertTriangle size={16} className="text-red-500 shrink-0" />
+            )}
+            <span className="text-sm text-neutral-400">{row.pdModel}</span>
+          </div>
+          <div className={`text-sm text-center font-medium
+                         ${row.lmdStatus === 'CRITICAL GAP' ? 'text-red-400' : 'text-neutral-400'}`}>
+            {row.lmdStatus}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const EnhancedTimelineSection: React.FC = () => {
+  const [expandedPhase, setExpandedPhase] = useState<number | null>(null);
+  const phaseRefs = React.useRef<(HTMLDivElement | null)[]>([]);
+
+  const togglePhase = (idx: number) => {
+    const isExpanding = expandedPhase !== idx;
+
+    // Scroll immediately if expanding
+    if (isExpanding && phaseRefs.current[idx]) {
+      const element = phaseRefs.current[idx];
+      if (element) {
+        const yOffset = -120; // Offset for header with padding
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }
+
+    setExpandedPhase(expandedPhase === idx ? null : idx);
+  };
+
+  const getPhaseColor = (idx: number) => {
+    const colors = [
+      { dot: 'bg-orange-400', bg: 'bg-orange-400/10', text: 'text-orange-400', badge: 'bg-orange-400/20 border-orange-400/30' },
+      { dot: 'bg-orange-500', bg: 'bg-orange-500/10', text: 'text-orange-500', badge: 'bg-orange-500/20 border-orange-500/30' },
+      { dot: 'bg-orange-600', bg: 'bg-orange-600/10', text: 'text-orange-600', badge: 'bg-orange-600/20 border-orange-600/30' },
+      { dot: 'bg-orange-700', bg: 'bg-orange-700/10', text: 'text-orange-700', badge: 'bg-orange-700/20 border-orange-700/30' }
+    ];
+    return colors[idx] || colors[0];
+  };
+
+  return (
+    <div className="relative pt-12">
+      {/* Vertical timeline line with gradient */}
+      <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-orange-400 via-orange-500 to-orange-700 md:left-1/2 md:-ml-px"></div>
+
+      <div className="space-y-12">
+        {roadmapPhases.map((item, idx) => {
+          const colors = getPhaseColor(idx);
+          return (
+            <div
+              key={idx}
+              className={`relative flex flex-col md:flex-row gap-8 items-start ${
+                idx % 2 !== 0 ? 'md:flex-row-reverse' : ''
+              }`}
+            >
+              {/* Timeline marker */}
+              <div className="absolute left-8 -translate-x-1/2 md:left-1/2 w-10 h-10 rounded-full bg-black border-4 border-neutral-900 z-10 flex items-center justify-center">
+                <div className={`w-4 h-4 rounded-full ${colors.dot}`}></div>
+              </div>
+
+              {/* Phase Card */}
+              <div
+                ref={(el) => (phaseRefs.current[idx] = el)}
+                className="ml-16 md:ml-0 w-full md:w-1/2 pl-0 md:px-8"
+              >
+                <div className="bg-neutral-900/40 rounded-xl border border-neutral-800/50 overflow-hidden transition-all hover:bg-neutral-900/50">
+                  {/* Card Header (always visible, clickable) */}
+                  <div
+                    onClick={() => togglePhase(idx)}
+                    className="p-5 md:p-6 cursor-pointer"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className={`text-[10px] font-bold uppercase tracking-wide px-2 py-1 rounded border ${colors.badge} ${colors.text}`}>
+                            {item.time}
+                          </span>
+                          <span className="text-[10px] text-neutral-500 uppercase tracking-wide">
+                            {item.subtitle}
+                          </span>
+                        </div>
+                        <h4 className="text-lg font-bold text-white mb-2">{item.phase}</h4>
+                        <p className="text-sm text-neutral-400 leading-relaxed">
+                          {item.desc}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className={`p-2 rounded-lg ${colors.bg} border border-neutral-800/50 shrink-0`}>
+                          <div className={colors.text}>
+                            {item.icon}
+                          </div>
+                        </div>
+                        {expandedPhase === idx ? (
+                          <ChevronUp size={18} className="text-neutral-500 shrink-0" />
+                        ) : (
+                          <ChevronDown size={18} className="text-neutral-500 shrink-0" />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Expandable Deliverables Section */}
+                  {expandedPhase === idx && (
+                    <div className={`px-5 md:px-6 pb-5 md:pb-6 pt-0 border-t border-neutral-800/50 ${colors.bg}`}>
+                      <div className="pt-5">
+                        <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-wide mb-3">
+                          Key Deliverables
+                        </p>
+                        <ul className="space-y-2.5">
+                          {item.deliverables.map((deliverable, dIdx) => (
+                            <li
+                              key={dIdx}
+                              className="flex items-start gap-3 text-xs text-neutral-300"
+                            >
+                              <CheckCircle size={14} className={`${colors.text} shrink-0 mt-0.5`} />
+                              <span>{deliverable}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Data Requirement */}
+                      {item.dataRequirement && (
+                        <div className="mt-4 pt-4 border-t border-neutral-800/30 flex justify-between items-center">
+                          <span className="text-[10px] text-neutral-500 font-bold uppercase tracking-wide">
+                            Data Requirement
+                          </span>
+                          <span className={`text-xs font-medium px-3 py-1 rounded border ${colors.badge} ${colors.text}`}>
+                            {item.dataRequirement}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Empty half for layout balance */}
+              <div className="hidden md:block w-1/2"></div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+const DataStrategyView: React.FC = () => (
+  <div className="max-w-6xl mx-auto space-y-8 animate-fadeIn pt-4 md:pt-6 pb-8 md:pb-12">
+
+    {/* Section 1: Enhanced Header */}
+    <div className="text-center space-y-6 mb-12 relative">
+      <div className="absolute left-1/2 -translate-x-1/2 top-0 -translate-y-1/2 w-64 h-64 bg-orange-500/20 blur-[100px] rounded-full pointer-events-none"></div>
+      <h2 className="relative text-5xl md:text-7xl font-black text-white tracking-tighter uppercase">
+        Data <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-300">Strategy</span>
       </h2>
-      <p className="text-lg text-neutral-400 max-w-3xl mx-auto leading-relaxed font-light">
-        Historical volume analysis reveals a critical gap: while the architecture supports advanced AI,
-        the <strong>low default rate (~2%)</strong> demands a phased strategy.
+      <p className="relative text-lg md:text-xl text-neutral-400 max-w-2xl mx-auto leading-relaxed font-light">
+        A phased approach to ML deployment that respects data maturity.
+        Start with <strong className="text-orange-400">efficiency gains</strong>,
+        mature into <strong className="text-orange-500">risk prediction</strong>.
       </p>
     </div>
 
-    {/* Strategy Comparison */}
+    {/* Section 2: Executive Summary */}
+    <ExecutiveSummarySection />
+    <div className="border-t border-neutral-800/50 my-6"></div>
+
+    {/* Section 3: Data Gap Analysis */}
+    <DataGapAnalysisSection />
+    <div className="border-t border-neutral-800/50 my-6"></div>
+
+    {/* Section 4: A/R vs PD Model Comparison (existing) */}
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
 
       {/* A/R Model */}
-      <div className="bg-neutral-900 rounded-3xl p-8 border border-neutral-800 relative overflow-hidden group hover:border-blue-500/50 transition-all">
-        <div className="absolute top-0 right-0 p-8 opacity-5">
-           <Users size={120} />
-        </div>
-        <div className="flex items-center gap-4 mb-6">
-           <div className="p-3 bg-blue-500/10 rounded-xl border border-blue-500/20 text-blue-500">
-             <Users size={24} />
-           </div>
-           <div>
-             <h3 className="text-xl font-bold text-white">A/R Model</h3>
-             <p className="text-xs text-blue-400 font-bold uppercase tracking-widest">Committee Clone</p>
-           </div>
+      <div className="bg-neutral-900/40 rounded-2xl p-6 md:p-8 border border-neutral-800/50">
+        <div className="mb-6">
+          <h3 className="text-xl font-bold text-white mb-1">A/R Model</h3>
+          <p className="text-xs text-neutral-400 font-medium uppercase tracking-wide">Stop-Gap: Committee Clone</p>
         </div>
 
-        <div className="space-y-6">
-           <div className="bg-black/50 p-6 rounded-2xl border border-neutral-800">
-             <div className="flex items-center justify-between mb-3">
-               <span className="text-neutral-500 text-xs font-bold uppercase">Data Required</span>
-               <div className="px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-full">
-                 <span className="text-blue-400 text-[10px] font-black uppercase tracking-wider">Baseline</span>
-               </div>
-             </div>
-             <div className="mb-3">
-               <span className="text-white text-3xl font-black">10k - 15k</span>
-               <span className="text-neutral-500 text-sm font-medium ml-2">records</span>
+        <div className="space-y-5">
+           <div className="bg-black/30 p-5 rounded-xl border border-neutral-800/30">
+             <div className="text-xs text-neutral-500 font-bold uppercase mb-3">Data Required</div>
+             <div className="mb-2">
+               <span className="text-white text-2xl font-bold">10k - 15k</span>
+               <span className="text-neutral-500 text-sm ml-2">records</span>
              </div>
              <p className="text-xs text-neutral-400">Records of past decisions (Approved vs Rejected).</p>
            </div>
 
            <ul className="space-y-3">
              <li className="flex gap-3 text-sm text-neutral-300">
-               <CheckCircle size={18} className="text-blue-500 shrink-0" />
+               <CheckCircle size={18} className="text-orange-500 shrink-0" />
                <span>Replicates current committee consistency.</span>
              </li>
              <li className="flex gap-3 text-sm text-neutral-300">
-               <CheckCircle size={18} className="text-blue-500 shrink-0" />
+               <CheckCircle size={18} className="text-orange-500 shrink-0" />
                <span>Implementable in the short term (MVP).</span>
              </li>
              <li className="flex gap-3 text-sm text-neutral-300">
-               <AlertTriangle size={18} className="text-amber-500 shrink-0" />
+               <AlertTriangle size={18} className="text-orange-500 shrink-0" />
                <span>Inherits existing human biases.</span>
              </li>
            </ul>
+
+           <div className="p-4 bg-black/20 rounded-xl border border-neutral-800/30">
+             <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-wide mb-3">Key Performance Indicators</p>
+             <div className="flex gap-3 mb-3">
+               <div className="text-xs text-white font-medium">Time to Decision</div>
+               <div className="text-xs text-neutral-500">•</div>
+               <div className="text-xs text-white font-medium">Consistency</div>
+             </div>
+             <p className="text-[10px] text-neutral-500">
+               Loss Rate is NOT a KPI for A/R model
+             </p>
+           </div>
         </div>
       </div>
 
       {/* PD Model */}
-      <div className="bg-neutral-900 rounded-3xl p-8 border border-neutral-800 relative overflow-hidden group hover:border-orange-500/50 transition-all">
-        <div className="absolute top-0 right-0 p-8 opacity-5">
-           <Scale size={120} />
-        </div>
-        <div className="flex items-center gap-4 mb-6">
-           <div className="p-3 bg-orange-500/10 rounded-xl border border-orange-500/20 text-orange-500">
-             <Scale size={24} />
-           </div>
-           <div>
-             <h3 className="text-xl font-bold text-white">PD Model</h3>
-             <p className="text-xs text-orange-500 font-bold uppercase tracking-widest">Risk Prediction</p>
-           </div>
+      <div className="bg-neutral-900/40 rounded-2xl p-6 md:p-8 border border-neutral-800/50">
+        <div className="mb-6">
+          <h3 className="text-xl font-bold text-white mb-1">PD Model</h3>
+          <p className="text-xs text-neutral-400 font-medium uppercase tracking-wide">Risk Prediction</p>
         </div>
 
-        <div className="space-y-6">
-           <div className="bg-black/50 p-6 rounded-2xl border border-neutral-800">
-             <div className="flex items-center justify-between mb-3">
-               <span className="text-neutral-500 text-xs font-bold uppercase">Data Required</span>
-               <div className="px-3 py-1 bg-orange-500/20 border border-orange-500/30 rounded-full">
-                 <span className="text-orange-400 text-[10px] font-black uppercase tracking-wider">2x Volume</span>
-               </div>
-             </div>
-             <div className="mb-3">
-               <span className="text-white text-3xl font-black">20k - 25k</span>
-               <span className="text-neutral-500 text-sm font-medium ml-2">records</span>
+        <div className="space-y-5">
+           <div className="bg-black/30 p-5 rounded-xl border border-neutral-800/30">
+             <div className="text-xs text-neutral-500 font-bold uppercase mb-3">Data Required</div>
+             <div className="mb-2">
+               <span className="text-white text-2xl font-bold">20k - 25k</span>
+               <span className="text-neutral-500 text-sm ml-2">records</span>
              </div>
              <p className="text-xs text-neutral-400">
-                Needs <span className="text-orange-400 font-bold">~300 defaults</span> to learn real risk patterns.
+                Needs <span className="text-orange-400 font-medium">~300 defaults</span> to learn real risk patterns.
              </p>
            </div>
 
@@ -562,57 +923,29 @@ const DataStrategyView: React.FC = () => (
                <span>Eliminates subjective biases.</span>
              </li>
              <li className="flex gap-3 text-sm text-neutral-300">
-               <AlertTriangle size={18} className="text-amber-500 shrink-0" />
+               <AlertTriangle size={18} className="text-orange-500 shrink-0" />
                <span>Requires historical maturity (Phase 2).</span>
              </li>
            </ul>
+
+           <div className="p-4 bg-black/20 rounded-xl border border-neutral-800/30">
+             <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-wide mb-3">Key Performance Indicators</p>
+             <div className="flex gap-3 mb-3">
+               <div className="text-xs text-white font-medium">Loss Rate</div>
+               <div className="text-xs text-neutral-500">•</div>
+               <div className="text-xs text-white font-medium">Profit per Customer</div>
+             </div>
+             <p className="text-[10px] text-neutral-500">
+               Optimizes for portfolio profitability
+             </p>
+           </div>
         </div>
       </div>
     </div>
+    <div className="border-t border-neutral-800/50 my-6"></div>
 
-    {/* Timeline */}
-    <div className="relative pt-12">
-       <div className="absolute left-8 top-0 bottom-0 w-px bg-neutral-800 md:left-1/2 md:-ml-px"></div>
-       <div className="space-y-12">
-         {roadmapData.map((item, idx) => (
-           <div key={idx} className={`relative flex flex-col md:flex-row gap-8 items-center ${idx % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}>
-
-             {/* Icon Marker */}
-             <div className="absolute left-8 -translate-x-1/2 md:left-1/2 w-8 h-8 rounded-full bg-black border-4 border-neutral-900 z-10 flex items-center justify-center">
-               <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
-             </div>
-
-             {/* Content */}
-             <div className="ml-16 md:ml-0 w-full md:w-1/2 pl-0 md:px-12">
-               <div className="bg-neutral-900 p-6 rounded-2xl border border-neutral-800 hover:border-neutral-700 transition-colors">
-                 <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded bg-black text-white mb-2 inline-block`}>
-                        {item.time}
-                      </span>
-                      <h4 className="text-lg font-bold text-white">{item.phase}</h4>
-                      <span className="text-xs text-neutral-500 uppercase tracking-wider font-bold">{item.subtitle}</span>
-                    </div>
-                    <div className={`p-2 rounded-lg ${item.color} text-black`}>
-                      {item.icon}
-                    </div>
-                 </div>
-                 <p className="text-sm text-neutral-400 mb-4 leading-relaxed">
-                   {item.desc}
-                 </p>
-                 <div className="pt-4 border-t border-neutral-800 flex justify-between items-center">
-                    <span className="text-xs text-neutral-500 font-bold uppercase">Volume Target</span>
-                    <span className="text-sm font-mono text-white">{item.volume}</span>
-                 </div>
-               </div>
-             </div>
-
-             {/* Empty half for layout balance */}
-             <div className="hidden md:block w-1/2"></div>
-           </div>
-         ))}
-       </div>
-    </div>
+    {/* Section 5: Enhanced 4-Phase Timeline */}
+    <EnhancedTimelineSection />
   </div>
 );
 
@@ -627,7 +960,7 @@ interface ArchitectureViewProps {
 
 const ArchitectureView: React.FC<ArchitectureViewProps> = ({ setSelectedNode, showCompliance, setShowCompliance, setShowSovInfo }) => {
   return (
-    <div className="flex flex-col pb-8 md:pb-12">
+    <div className="flex flex-col pb-8 md:pb-12 animate-fadeIn">
 
       {/* Toolbar */}
       <div className="mb-8 sm:mb-12">
@@ -759,9 +1092,9 @@ const ArchitectureView: React.FC<ArchitectureViewProps> = ({ setSelectedNode, sh
 };
 
 const ROIView: React.FC = () => (
-  <div className="max-w-7xl mx-auto space-y-20 animate-fadeIn py-12">
+  <div className="max-w-7xl mx-auto space-y-20 animate-fadeIn pt-4 md:pt-6 pb-12">
 
-    <div className="text-center space-y-8 mb-20 relative">
+    <div className="text-center space-y-6 mb-12 relative">
       <div className="absolute left-1/2 -translate-x-1/2 top-0 -translate-y-1/2 w-64 h-64 bg-orange-500/20 blur-[100px] rounded-full pointer-events-none"></div>
       <h2 className="relative text-5xl md:text-7xl font-black text-white tracking-tighter uppercase">
         The Economic <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-300">Shift</span>
@@ -925,20 +1258,9 @@ export default function PazzMLAppV6() {
               }}
               aria-label="View architecture diagram"
               aria-current={activeTab === 'architecture' ? 'page' : undefined}
-              className={`px-3 sm:px-6 py-2 sm:py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:outline-none ${activeTab === 'architecture' ? 'bg-orange-600 text-black shadow-lg shadow-orange-600/20' : 'text-neutral-500 hover:text-white hover:bg-neutral-800'}`}
+              className={`w-[90px] sm:w-[120px] py-2 sm:py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all flex items-center justify-center focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:outline-none ${activeTab === 'architecture' ? 'bg-orange-600 text-black shadow-lg shadow-orange-600/20' : 'text-neutral-500 hover:text-white hover:bg-neutral-800'}`}
             >
-              Architecture
-            </button>
-            <button
-              onClick={() => {
-                setActiveTab('roi');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              aria-label="View return on investment analysis"
-              aria-current={activeTab === 'roi' ? 'page' : undefined}
-              className={`px-3 sm:px-6 py-2 sm:py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:outline-none ${activeTab === 'roi' ? 'bg-orange-600 text-black shadow-lg shadow-orange-600/20' : 'text-neutral-500 hover:text-white hover:bg-neutral-800'}`}
-            >
-              ROI
+              Arch
             </button>
             <button
               onClick={() => {
@@ -947,9 +1269,20 @@ export default function PazzMLAppV6() {
               }}
               aria-label="View data strategy"
               aria-current={activeTab === 'strategy' ? 'page' : undefined}
-              className={`px-3 sm:px-6 py-2 sm:py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none ${activeTab === 'strategy' ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'text-neutral-500 hover:text-white hover:bg-neutral-800'}`}
+              className={`w-[90px] sm:w-[120px] py-2 sm:py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all flex items-center justify-center focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:outline-none ${activeTab === 'strategy' ? 'bg-orange-600 text-black shadow-lg shadow-orange-600/20' : 'text-neutral-500 hover:text-white hover:bg-neutral-800'}`}
             >
-              Strategy
+              Strat
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab('roi');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              aria-label="View return on investment analysis"
+              aria-current={activeTab === 'roi' ? 'page' : undefined}
+              className={`w-[90px] sm:w-[120px] py-2 sm:py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all flex items-center justify-center focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:outline-none ${activeTab === 'roi' ? 'bg-orange-600 text-black shadow-lg shadow-orange-600/20' : 'text-neutral-500 hover:text-white hover:bg-neutral-800'}`}
+            >
+              ROI
             </button>
           </nav>
         </div>
@@ -965,8 +1298,8 @@ export default function PazzMLAppV6() {
             setShowSovInfo={setShowSovInfo}
           />
         )}
-        {activeTab === 'roi' && <ROIView />}
         {activeTab === 'strategy' && <DataStrategyView />}
+        {activeTab === 'roi' && <ROIView />}
       </main>
 
     </div>
