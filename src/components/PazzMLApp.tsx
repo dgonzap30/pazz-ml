@@ -25,7 +25,6 @@ import {
   ChevronUp,
   Users,
   AlertTriangle,
-  Scale,
   Shield,
   Eye,
   Rocket,
@@ -736,7 +735,7 @@ const EnhancedTimelineSection: React.FC = () => {
 
               {/* Phase Card */}
               <div
-                ref={(el) => (phaseRefs.current[idx] = el)}
+                ref={(el) => { phaseRefs.current[idx] = el; }}
                 className="ml-16 md:ml-0 w-full md:w-1/2 pl-0 md:px-8"
               >
                 <div className="bg-neutral-900/40 rounded-xl border border-neutral-800/50 overflow-hidden transition-all hover:bg-neutral-900/50">
