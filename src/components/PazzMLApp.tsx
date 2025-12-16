@@ -861,15 +861,15 @@ const EnhancedTimelineSection: React.FC = () => {
 };
 
 const DataStrategyView: React.FC = () => (
-  <div className="max-w-6xl mx-auto space-y-6 md:space-y-8 animate-fadeIn pt-4 md:pt-6 pb-8 md:pb-12">
+  <div className="w-full max-w-6xl mx-auto space-y-4 sm:space-y-6 md:space-y-8 animate-fadeIn pt-2 sm:pt-4 md:pt-6 pb-12 sm:pb-16 md:pb-20">
 
     {/* Section 1: Enhanced Header */}
-    <div className="text-center space-y-4 md:space-y-6 mb-8 md:mb-12 relative">
+    <div className="text-center space-y-3 sm:space-y-4 md:space-y-6 mb-6 sm:mb-8 md:mb-12 relative px-2">
       <div className="absolute left-1/2 -translate-x-1/2 top-0 -translate-y-1/2 w-64 h-64 bg-orange-500/20 blur-[100px] rounded-full pointer-events-none"></div>
-      <h2 className="relative text-5xl md:text-7xl font-black text-white tracking-tighter uppercase">
+      <h2 className="relative text-4xl sm:text-5xl md:text-7xl font-black text-white tracking-tighter uppercase">
         Data <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-300">Strategy</span>
       </h2>
-      <p className="relative text-lg md:text-xl text-neutral-400 max-w-2xl mx-auto leading-relaxed font-light">
+      <p className="relative text-base sm:text-lg md:text-xl text-neutral-400 max-w-2xl mx-auto leading-relaxed font-light px-2">
         A phased approach to ML deployment that respects data maturity.
         Start with <strong className="text-orange-400">efficiency gains</strong>,
         mature into <strong className="text-orange-500">risk prediction</strong>.
@@ -878,11 +878,11 @@ const DataStrategyView: React.FC = () => (
 
     {/* Section 2: Executive Summary */}
     <ExecutiveSummarySection />
-    <div className="border-t border-neutral-800/50 my-4 md:my-6"></div>
+    <div className="border-t border-neutral-800/50 my-3 sm:my-4 md:my-6"></div>
 
     {/* Section 3: Data Gap Analysis */}
     <DataGapAnalysisSection />
-    <div className="border-t border-neutral-800/50 my-4 md:my-6"></div>
+    <div className="border-t border-neutral-800/50 my-3 sm:my-4 md:my-6"></div>
 
     {/* Section 4: A/R vs PD Model Comparison (existing) */}
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10">
@@ -981,7 +981,7 @@ const DataStrategyView: React.FC = () => (
         </div>
       </div>
     </div>
-    <div className="border-t border-neutral-800/50 my-4 md:my-6"></div>
+    <div className="border-t border-neutral-800/50 my-3 sm:my-4 md:my-6"></div>
 
     {/* Section 5: Enhanced 4-Phase Timeline */}
     <EnhancedTimelineSection />
@@ -999,7 +999,7 @@ interface ArchitectureViewProps {
 
 const ArchitectureView: React.FC<ArchitectureViewProps> = ({ setSelectedNode, showCompliance, setShowCompliance, setShowSovInfo }) => {
   return (
-    <div className="flex flex-col pb-8 md:pb-12 animate-fadeIn">
+    <div className="flex flex-col pb-12 sm:pb-16 md:pb-20 animate-fadeIn">
 
       {/* Toolbar */}
       <div className="mb-8 sm:mb-12">
@@ -1131,7 +1131,7 @@ const ArchitectureView: React.FC<ArchitectureViewProps> = ({ setSelectedNode, sh
 };
 
 const ROIView: React.FC = () => (
-  <div className="max-w-7xl mx-auto space-y-20 animate-fadeIn pt-4 md:pt-6 pb-12">
+  <div className="max-w-7xl mx-auto space-y-8 sm:space-y-12 md:space-y-20 animate-fadeIn pt-2 sm:pt-4 md:pt-6 pb-12 sm:pb-16 md:pb-20">
 
     <div className="text-center space-y-6 mb-12 relative">
       <div className="absolute left-1/2 -translate-x-1/2 top-0 -translate-y-1/2 w-64 h-64 bg-orange-500/20 blur-[100px] rounded-full pointer-events-none"></div>
@@ -1328,7 +1328,7 @@ export default function PazzMLAppV6() {
       </header>
 
       {/* Main Content */}
-      <main id="main-content" className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 sm:pt-10" role="main">
+      <main id="main-content" className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pt-4 sm:pt-6 md:pt-10" role="main">
         {activeTab === 'architecture' && (
           <ArchitectureView
             setSelectedNode={setSelectedNode}
