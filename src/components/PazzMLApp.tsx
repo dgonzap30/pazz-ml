@@ -1279,17 +1279,17 @@ export default function PazzMLAppV6() {
 
       {/* App Header */}
       <header className="border-b border-neutral-900 bg-black/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 sm:h-24 flex items-center justify-between gap-3">
-          <div className="flex items-end gap-1.5 sm:gap-2">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 md:h-24 flex items-center justify-between gap-2 sm:gap-3">
+          <div className="flex items-end gap-1 sm:gap-1.5 md:gap-2 shrink-0">
             <img
               src="/pazz-logo.svg"
               alt="Pazz"
-              className="h-10 sm:h-12 w-auto"
+              className="h-8 sm:h-10 md:h-12 w-auto"
             />
-            <span className="text-3xl sm:text-4xl font-black text-white tracking-tight leading-none translate-y-1" style={{ fontFamily: 'inherit' }}>ML</span>
+            <span className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight leading-none translate-y-0.5 sm:translate-y-1" style={{ fontFamily: 'inherit' }}>ML</span>
           </div>
 
-          <nav className="flex gap-1 bg-neutral-900/50 p-1 sm:p-1.5 rounded-xl border border-neutral-800/50" aria-label="Main navigation">
+          <nav className="flex gap-0.5 sm:gap-1 bg-neutral-900/50 p-0.5 sm:p-1 md:p-1.5 rounded-lg sm:rounded-xl border border-neutral-800/50" aria-label="Main navigation">
             <button
               onClick={() => {
                 setActiveTab('architecture');
@@ -1297,7 +1297,7 @@ export default function PazzMLAppV6() {
               }}
               aria-label="View architecture diagram"
               aria-current={activeTab === 'architecture' ? 'page' : undefined}
-              className={`w-[90px] sm:w-[120px] py-2 sm:py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all flex items-center justify-center focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:outline-none ${activeTab === 'architecture' ? 'bg-orange-600 text-black shadow-lg shadow-orange-600/20' : 'text-neutral-500 hover:text-white hover:bg-neutral-800'}`}
+              className={`w-[70px] sm:w-[90px] md:w-[120px] py-1.5 sm:py-2 md:py-2.5 rounded-md sm:rounded-lg text-[9px] sm:text-[10px] md:text-xs font-black uppercase tracking-wider sm:tracking-widest transition-all flex items-center justify-center focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:outline-none ${activeTab === 'architecture' ? 'bg-orange-600 text-black shadow-lg shadow-orange-600/20' : 'text-neutral-500 hover:text-white hover:bg-neutral-800'}`}
             >
               Arch
             </button>
@@ -1308,7 +1308,7 @@ export default function PazzMLAppV6() {
               }}
               aria-label="View data strategy"
               aria-current={activeTab === 'strategy' ? 'page' : undefined}
-              className={`w-[90px] sm:w-[120px] py-2 sm:py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all flex items-center justify-center focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:outline-none ${activeTab === 'strategy' ? 'bg-orange-600 text-black shadow-lg shadow-orange-600/20' : 'text-neutral-500 hover:text-white hover:bg-neutral-800'}`}
+              className={`w-[70px] sm:w-[90px] md:w-[120px] py-1.5 sm:py-2 md:py-2.5 rounded-md sm:rounded-lg text-[9px] sm:text-[10px] md:text-xs font-black uppercase tracking-wider sm:tracking-widest transition-all flex items-center justify-center focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:outline-none ${activeTab === 'strategy' ? 'bg-orange-600 text-black shadow-lg shadow-orange-600/20' : 'text-neutral-500 hover:text-white hover:bg-neutral-800'}`}
             >
               Strat
             </button>
@@ -1319,7 +1319,7 @@ export default function PazzMLAppV6() {
               }}
               aria-label="View return on investment analysis"
               aria-current={activeTab === 'roi' ? 'page' : undefined}
-              className={`w-[90px] sm:w-[120px] py-2 sm:py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all flex items-center justify-center focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:outline-none ${activeTab === 'roi' ? 'bg-orange-600 text-black shadow-lg shadow-orange-600/20' : 'text-neutral-500 hover:text-white hover:bg-neutral-800'}`}
+              className={`w-[70px] sm:w-[90px] md:w-[120px] py-1.5 sm:py-2 md:py-2.5 rounded-md sm:rounded-lg text-[9px] sm:text-[10px] md:text-xs font-black uppercase tracking-wider sm:tracking-widest transition-all flex items-center justify-center focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:outline-none ${activeTab === 'roi' ? 'bg-orange-600 text-black shadow-lg shadow-orange-600/20' : 'text-neutral-500 hover:text-white hover:bg-neutral-800'}`}
             >
               ROI
             </button>
