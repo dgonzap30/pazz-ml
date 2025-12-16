@@ -754,9 +754,9 @@ const EnhancedTimelineSection: React.FC = () => {
   };
 
   return (
-    <div className="relative pt-12">
+    <div className="relative pt-12 pl-3 md:pl-0">
       {/* Vertical timeline line with gradient */}
-      <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-orange-400 via-orange-500 to-orange-700 md:left-1/2 md:-ml-px"></div>
+      <div className="absolute left-3 top-0 bottom-0 w-px bg-gradient-to-b from-orange-400 via-orange-500 to-orange-700 md:left-1/2 md:-ml-px"></div>
 
       <div className="space-y-12">
         {roadmapPhases.map((item, idx) => {
@@ -769,14 +769,14 @@ const EnhancedTimelineSection: React.FC = () => {
               }`}
             >
               {/* Timeline marker */}
-              <div className="absolute left-8 -translate-x-1/2 md:left-1/2 w-10 h-10 rounded-full bg-black border-4 border-neutral-900 z-10 flex items-center justify-center">
+              <div className="absolute left-3 -translate-x-1/2 md:left-1/2 w-10 h-10 rounded-full bg-black border-4 border-neutral-900 z-10 flex items-center justify-center">
                 <div className={`w-4 h-4 rounded-full ${colors.dot}`}></div>
               </div>
 
               {/* Phase Card */}
               <div
                 ref={(el) => { phaseRefs.current[idx] = el; }}
-                className="ml-16 md:ml-0 w-full md:w-1/2 pl-0 md:px-8"
+                className="ml-3 md:ml-0 w-full md:w-1/2 pl-0 md:px-8"
               >
                 <div className="bg-neutral-900/40 rounded-xl border border-neutral-800/50 overflow-hidden transition-all hover:bg-neutral-900/50">
                   {/* Card Header (always visible, clickable) */}
@@ -861,7 +861,7 @@ const EnhancedTimelineSection: React.FC = () => {
 };
 
 const DataStrategyView: React.FC = () => (
-  <div className="w-full max-w-6xl mx-auto space-y-4 sm:space-y-6 md:space-y-8 animate-fadeIn pt-2 sm:pt-4 md:pt-6 pb-12 sm:pb-16 md:pb-20">
+  <div className="w-full max-w-6xl mx-auto space-y-4 sm:space-y-6 md:space-y-8 animate-fadeIn pt-2 sm:pt-4 md:pt-6 pb-24 sm:pb-28 md:pb-32">
 
     {/* Section 1: Enhanced Header */}
     <div className="text-center space-y-3 sm:space-y-4 md:space-y-6 mb-6 sm:mb-8 md:mb-12 relative px-2">
@@ -999,7 +999,7 @@ interface ArchitectureViewProps {
 
 const ArchitectureView: React.FC<ArchitectureViewProps> = ({ setSelectedNode, showCompliance, setShowCompliance, setShowSovInfo }) => {
   return (
-    <div className="flex flex-col pb-12 sm:pb-16 md:pb-20 animate-fadeIn">
+    <div className="flex flex-col pb-24 sm:pb-28 md:pb-32 animate-fadeIn">
 
       {/* Toolbar */}
       <div className="mb-8 sm:mb-12">
@@ -1131,7 +1131,7 @@ const ArchitectureView: React.FC<ArchitectureViewProps> = ({ setSelectedNode, sh
 };
 
 const ROIView: React.FC = () => (
-  <div className="max-w-7xl mx-auto space-y-8 sm:space-y-12 md:space-y-20 animate-fadeIn pt-2 sm:pt-4 md:pt-6 pb-12 sm:pb-16 md:pb-20">
+  <div className="max-w-7xl mx-auto space-y-8 sm:space-y-12 md:space-y-20 animate-fadeIn pt-2 sm:pt-4 md:pt-6 pb-24 sm:pb-28 md:pb-32">
 
     <div className="text-center space-y-6 mb-12 relative">
       <div className="absolute left-1/2 -translate-x-1/2 top-0 -translate-y-1/2 w-64 h-64 bg-orange-500/20 blur-[100px] rounded-full pointer-events-none"></div>
