@@ -630,7 +630,8 @@ const DataGapAnalysisSection: React.FC = () => (
       </h3>
     </div>
 
-    <div className="bg-neutral-900/40 rounded-xl border border-neutral-800/50 overflow-hidden">
+    {/* Desktop: Table layout */}
+    <div className="hidden md:block bg-neutral-900/40 rounded-xl border border-neutral-800/50 overflow-hidden">
       {/* Table Header */}
       <div className="grid grid-cols-4 gap-4 p-4 bg-black/20 border-b border-neutral-800/30">
         <div className="text-xs font-bold text-neutral-400 uppercase tracking-wide">
@@ -676,6 +677,45 @@ const DataGapAnalysisSection: React.FC = () => (
           <div className={`text-sm text-center font-medium
                          ${row.lmdStatus === 'CRITICAL GAP' ? 'text-red-400' : 'text-neutral-400'}`}>
             {row.lmdStatus}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* Mobile: Card layout */}
+    <div className="md:hidden space-y-4">
+      {dataGapAnalysis.map((row, idx) => (
+        <div key={idx} className="bg-neutral-900/40 rounded-xl p-4 border border-neutral-800/50">
+          <div className="text-sm font-bold text-white mb-3">{row.feature}</div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <span className="text-[11px] text-neutral-500 uppercase tracking-wide block mb-1.5">A/R Model</span>
+              <div className="flex items-start gap-2">
+                {row.arReady ? (
+                  <CheckCircle size={14} className="text-emerald-500 shrink-0 mt-0.5" />
+                ) : (
+                  <AlertTriangle size={14} className="text-red-500 shrink-0 mt-0.5" />
+                )}
+                <span className="text-xs text-neutral-300 leading-tight">{row.arModel}</span>
+              </div>
+            </div>
+            <div>
+              <span className="text-[11px] text-neutral-500 uppercase tracking-wide block mb-1.5">PD Model</span>
+              <div className="flex items-start gap-2">
+                {row.pdReady ? (
+                  <CheckCircle size={14} className="text-emerald-500 shrink-0 mt-0.5" />
+                ) : (
+                  <AlertTriangle size={14} className="text-red-500 shrink-0 mt-0.5" />
+                )}
+                <span className="text-xs text-neutral-300 leading-tight">{row.pdModel}</span>
+              </div>
+            </div>
+          </div>
+          <div className="mt-3 pt-3 border-t border-neutral-800/30">
+            <span className="text-[11px] text-neutral-500 uppercase tracking-wide">Status: </span>
+            <span className={`text-xs font-medium ${row.lmdStatus === 'CRITICAL GAP' ? 'text-red-400' : 'text-neutral-400'}`}>
+              {row.lmdStatus}
+            </span>
           </div>
         </div>
       ))}
@@ -821,10 +861,10 @@ const EnhancedTimelineSection: React.FC = () => {
 };
 
 const DataStrategyView: React.FC = () => (
-  <div className="max-w-6xl mx-auto space-y-8 animate-fadeIn pt-4 md:pt-6 pb-8 md:pb-12">
+  <div className="max-w-6xl mx-auto space-y-6 md:space-y-8 animate-fadeIn pt-4 md:pt-6 pb-8 md:pb-12">
 
     {/* Section 1: Enhanced Header */}
-    <div className="text-center space-y-6 mb-12 relative">
+    <div className="text-center space-y-4 md:space-y-6 mb-8 md:mb-12 relative">
       <div className="absolute left-1/2 -translate-x-1/2 top-0 -translate-y-1/2 w-64 h-64 bg-orange-500/20 blur-[100px] rounded-full pointer-events-none"></div>
       <h2 className="relative text-5xl md:text-7xl font-black text-white tracking-tighter uppercase">
         Data <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-300">Strategy</span>
@@ -838,14 +878,14 @@ const DataStrategyView: React.FC = () => (
 
     {/* Section 2: Executive Summary */}
     <ExecutiveSummarySection />
-    <div className="border-t border-neutral-800/50 my-6"></div>
+    <div className="border-t border-neutral-800/50 my-4 md:my-6"></div>
 
     {/* Section 3: Data Gap Analysis */}
     <DataGapAnalysisSection />
-    <div className="border-t border-neutral-800/50 my-6"></div>
+    <div className="border-t border-neutral-800/50 my-4 md:my-6"></div>
 
     {/* Section 4: A/R vs PD Model Comparison (existing) */}
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10">
 
       {/* A/R Model */}
       <div className="bg-neutral-900/40 rounded-2xl p-6 md:p-8 border border-neutral-800/50">
@@ -941,7 +981,7 @@ const DataStrategyView: React.FC = () => (
         </div>
       </div>
     </div>
-    <div className="border-t border-neutral-800/50 my-6"></div>
+    <div className="border-t border-neutral-800/50 my-4 md:my-6"></div>
 
     {/* Section 5: Enhanced 4-Phase Timeline */}
     <EnhancedTimelineSection />
