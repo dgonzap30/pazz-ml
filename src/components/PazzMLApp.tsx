@@ -192,17 +192,17 @@ const roiData: ROIDataItem[] = [
   {
     metric: 'Time to Decision',
     manual: 72,
-    auto: 0.01,
+    auto: 0.08,
     unit: 'Hours',
     delta: '-99%',
-    desc: 'Reduces turnaround from days to seconds, preventing customer churn.'
+    desc: 'Reduces turnaround from days to minutes, preventing customer churn.'
   },
   {
     metric: 'Conversion Rate',
     manual: 12,
-    auto: 18,
+    auto: 16,
     unit: '% Sold',
-    delta: '+50%',
+    delta: '+33%',
     desc: 'Instant approvals capture impulse buyers before they shop elsewhere.'
   }
 ];
