@@ -861,7 +861,7 @@ const EnhancedTimelineSection: React.FC = () => {
 };
 
 const DataStrategyView: React.FC = () => (
-  <div className="w-full max-w-6xl mx-auto space-y-4 sm:space-y-6 md:space-y-8 animate-fadeIn pt-2 sm:pt-4 md:pt-6 pb-24 sm:pb-28 md:pb-32">
+  <div className="w-full max-w-6xl mx-auto space-y-4 sm:space-y-6 md:space-y-8 animate-fadeIn pt-2 sm:pt-4 md:pt-6 pb-8 sm:pb-12 md:pb-16">
 
     {/* Section 1: Enhanced Header */}
     <div className="text-center space-y-3 sm:space-y-4 md:space-y-6 mb-6 sm:mb-8 md:mb-12 relative px-2">
@@ -999,7 +999,7 @@ interface ArchitectureViewProps {
 
 const ArchitectureView: React.FC<ArchitectureViewProps> = ({ setSelectedNode, showCompliance, setShowCompliance, setShowSovInfo }) => {
   return (
-    <div className="flex flex-col pb-24 sm:pb-28 md:pb-32 animate-fadeIn">
+    <div className="flex flex-col pb-8 sm:pb-12 md:pb-16 animate-fadeIn">
 
       {/* Toolbar */}
       <div className="mb-8 sm:mb-12">
@@ -1131,7 +1131,7 @@ const ArchitectureView: React.FC<ArchitectureViewProps> = ({ setSelectedNode, sh
 };
 
 const ROIView: React.FC = () => (
-  <div className="max-w-7xl mx-auto space-y-8 sm:space-y-12 md:space-y-20 animate-fadeIn pt-2 sm:pt-4 md:pt-6 pb-24 sm:pb-28 md:pb-32">
+  <div className="max-w-7xl mx-auto space-y-8 sm:space-y-12 md:space-y-20 animate-fadeIn pt-2 sm:pt-4 md:pt-6 pb-8 sm:pb-12 md:pb-16">
 
     <div className="text-center space-y-6 mb-12 relative">
       <div className="absolute left-1/2 -translate-x-1/2 top-0 -translate-y-1/2 w-64 h-64 bg-orange-500/20 blur-[100px] rounded-full pointer-events-none"></div>
@@ -1247,6 +1247,37 @@ const ROIView: React.FC = () => (
   </div>
 );
 
+const Footer: React.FC = () => (
+  <footer className="border-t border-neutral-900 bg-black/80 backdrop-blur-md mt-16 sm:mt-20 md:mt-24">
+    <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-8 sm:py-10 md:py-12">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8">
+        {/* Logo and tagline */}
+        <div className="flex flex-col items-center md:items-start gap-2">
+          <div className="flex items-end gap-1.5">
+            <img
+              src="/pazz-logo.svg"
+              alt="Pazz"
+              className="h-8 w-auto"
+            />
+            <span className="text-2xl font-black text-white tracking-tight leading-none translate-y-0.5">ML</span>
+          </div>
+          <p className="text-xs text-neutral-500 font-medium">Intelligent Leasing Orchestration Platform</p>
+        </div>
+
+        {/* Info */}
+        <div className="flex flex-col items-center md:items-end gap-2 text-center md:text-right">
+          <p className="text-xs text-neutral-500">
+            © {new Date().getFullYear()} Pazz. All rights reserved.
+          </p>
+          <p className="text-[10px] text-neutral-600 max-w-md">
+            Designed for compliance with Mexican financial regulations (CNBV, LFPDPPP, Ley Fintech)
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+);
+
 export default function PazzMLAppV6() {
   const [activeTab, setActiveTab] = useState<'architecture' | 'roi' | 'strategy'>('architecture');
   const [selectedNode, setSelectedNode] = useState<NodeData | null>(null);
@@ -1254,7 +1285,7 @@ export default function PazzMLAppV6() {
   const [showSovInfo, setShowSovInfo] = useState(false);
 
   return (
-    <div className="min-h-screen bg-black text-neutral-200 font-sans selection:bg-orange-500/30 pb-8 md:pb-12">
+    <div className="min-h-screen bg-black text-neutral-200 font-sans selection:bg-orange-500/30 flex flex-col">
 
       {/* Skip to content link for accessibility */}
       <a
@@ -1328,7 +1359,7 @@ export default function PazzMLAppV6() {
       </header>
 
       {/* Main Content */}
-      <main id="main-content" className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pt-4 sm:pt-6 md:pt-10" role="main">
+      <main id="main-content" className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pt-4 sm:pt-6 md:pt-10 flex-1" role="main">
         {activeTab === 'architecture' && (
           <ArchitectureView
             setSelectedNode={setSelectedNode}
@@ -1340,6 +1371,9 @@ export default function PazzMLAppV6() {
         {activeTab === 'strategy' && <DataStrategyView />}
         {activeTab === 'roi' && <ROIView />}
       </main>
+
+      {/* Footer */}
+      <Footer />
 
     </div>
   );
