@@ -1248,7 +1248,7 @@ const ROIView: React.FC = () => (
 );
 
 const Footer: React.FC = () => (
-  <footer className="border-t border-neutral-900 bg-black/80 backdrop-blur-md mt-16 sm:mt-20 md:mt-24">
+  <footer className="border-t border-neutral-900 bg-black/80 backdrop-blur-md mt-8 sm:mt-12 md:mt-16">
     <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-8 sm:py-10 md:py-12">
       <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8">
         {/* Logo and tagline */}
